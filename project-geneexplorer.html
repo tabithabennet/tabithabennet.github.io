@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeneExplorer - Tabitha Bennet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#fdf0f0;--bg2:#f7e6e6;--bg3:#f2dcdc;--accent:#cc1a1a;--accent2:#991010;--text:#1a0a0a;--muted:#9a7070;--rule:#e8d0d0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:400;overflow-x:hidden;}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");opacity:0.55;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;background:rgba(253,240,240,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-mark{font-family:'Syne Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-mark:hover{color:var(--accent);}
+    .nav-links{list-style:none;display:flex;gap:2rem;}
+    .nav-links a{font-family:'Syne Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .page-wrap { max-width: 900px; margin: 0 auto; padding: 8rem 2.5rem 6rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem; transition: color .2s; }
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+    .proj-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .proj-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 300; line-height: 1.05; color: var(--text); margin-bottom: 1.5rem; }
+    .proj-subtitle { font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 600px; margin-bottom: 3rem; }
+    .proj-meta { display: flex; gap: 3rem; padding: 2rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 4rem; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .meta-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .proj-section { margin-bottom: 3.5rem; }
+    .proj-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 1.2rem; color: var(--text); }
+    .proj-section p { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 1rem; }
+    .proj-section ul { padding-left: 1.5rem; }
+    .proj-section li { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 0.4rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .tag { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.35rem 0.8rem; border: 1px solid var(--rule); color: var(--muted); }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
+    .stat-box { background: var(--bg2); padding: 1.5rem; border: 1px solid var(--rule); }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-desc { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .divider { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+    .quote-block { border-left: 2px solid var(--accent); padding: 1.2rem 1.8rem; background: var(--bg2); margin: 2rem 0; }
+    .quote-block p { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-style: italic; color: var(--text); margin: 0; }
+    footer{border-top:1px solid var(--rule);padding:2.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+    .f-name{font-family:'Syne Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+    .f-links{list-style:none;display:flex;gap:1.5rem;}
+    .f-links a{font-family:'Syne Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .f-links a:hover{color:var(--accent);}
+    .f-copy{font-family:'Syne Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--rule);}
+    @media(max-width:600px){nav{padding:1rem 1.2rem;}.nav-links{gap:1.2rem;}.page-wrap{padding:6rem 1.2rem 4rem;}.stat-grid{grid-template-columns:1fr 1fr;}.proj-meta{gap:1.5rem;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-mark">Tabitha Bennet</a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <a href="index.html#projects" class="back-link">Back to Work</a>
+
+    <p class="proj-eyebrow">Biotech - Data Visualisation - Harvard 2024</p>
+    <h1 class="proj-title">GeneExplorer</h1>
+    <p class="proj-subtitle">An interactive genomic data visualisation platform designed to make complex biotech data legible to non-specialists - built with D3.js and a complete design system.</p>
+
+    <div class="proj-meta">
+      <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Designer & Developer</span></div>
+      <div class="meta-item"><span class="meta-label">Timeline</span><span class="meta-value">2024 - Harvard</span></div>
+      <div class="meta-item"><span class="meta-label">Stack</span><span class="meta-value">D3.js, SPA, Design System</span></div>
+      <div class="meta-item"><span class="meta-label">Context</span><span class="meta-value">MLM Digital Media Design</span></div>
+    </div>
+
+    <div class="proj-section">
+      <h2>The Problem</h2>
+      <p>Genomic data is inherently complex - dense, multi-layered, and produced in formats designed for researchers, not patients or clinicians who need fast, actionable insight. Most visualisation tools in the biotech space either oversimplify to the point of meaninglessness, or present raw data with no navigational affordances.</p>
+      <p>GeneExplorer was built to occupy the gap: sophisticated enough to be genuinely useful, designed carefully enough to be navigable by someone without a genomics background.</p>
+    </div>
+
+    <div class="quote-block">
+      <p>The goal wasn't to make genomics easy. It was to make it navigable - a meaningful distinction when the stakes are clinical.</p>
+    </div>
+
+    <div class="proj-section">
+      <h2>What I Built</h2>
+      <p>The platform is a single-page application built on D3.js, with a complete design system developed in parallel to ensure visual consistency across all data states and interactive elements.</p>
+      <ul>
+        <li>Interactive chromosome map with drill-down capability to gene-level detail</li>
+        <li>Variant annotation panel with plain-language explanations alongside clinical notation</li>
+        <li>Comparative view for multi-sample analysis across family or cohort datasets</li>
+        <li>Colour system designed for accessibility - legible under low vision and colour blindness conditions</li>
+        <li>Full design system: tokens, components, states, data visualisation patterns</li>
+        <li>Responsive layout supporting tablet and large desktop screen sizes</li>
+      </ul>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-num">D3.js</div><div class="stat-desc">Interactive data visualisation library</div></div>
+      <div class="stat-box"><div class="stat-num">SPA</div><div class="stat-desc">Single-page application architecture</div></div>
+      <div class="stat-box"><div class="stat-num">Full</div><div class="stat-desc">Design system included</div></div>
+    </div>
+
+    <div class="proj-section">
+      <h2>Design Decisions</h2>
+      <p>The most contentious design decision was how much clinical information to surface by default. Too little and the tool becomes patronising; too much and the interface collapses under cognitive load. The solution was progressive disclosure - a clean top-level view that invites curiosity, with depth available on demand.</p>
+      <p>Typography was chosen to reinforce credibility without clinical coldness. Data labels use a monospaced system font for precision; contextual annotations use a warmer serif to signal that interpretation, not just data, is being offered.</p>
+    </div>
+
+    <div class="proj-section">
+      <h2>What I Learned</h2>
+      <p>Building for expert data is a particular kind of design challenge. Your users know more about the subject matter than you do, which means every simplification risks condescension. The discipline was in learning enough genomics to understand what mattered - and then designing for legibility without losing fidelity.</p>
+      <p>D3.js is extraordinarily powerful and extraordinarily unforgiving. The project deepened my understanding of data binding, scales, and the performance implications of rendering large genomic datasets in the browser.</p>
+    </div>
+
+    <hr class="divider" />
+    <div class="tags">
+      <span class="tag">D3.js</span>
+      <span class="tag">Biotech</span>
+      <span class="tag">Data Visualisation</span>
+      <span class="tag">SPA</span>
+      <span class="tag">Design System</span>
+      <span class="tag">Genomics</span>
+      <span class="tag">Harvard</span>
+    </div>
+  </div>
+
+  <footer>
+    <div class="f-name">Tabitha Bennet</div>
+    <ul class="f-links">
+      <li><a href="https://linkedin.com/in/tabitha-bennet-4a0341257" target="_blank">LinkedIn</a></li>
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Email</a></li>
+    </ul>
+    <span class="f-copy">2025 Tabitha Bennet</span>
+  </footer>
+</body>
+</html>

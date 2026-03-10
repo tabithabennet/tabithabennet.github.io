@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Body Is Generating Data You Can't Read Yet - Tabitha Bennet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#fdf0f0;--bg2:#f7e6e6;--bg3:#f2dcdc;--accent:#cc1a1a;--accent2:#991010;--text:#1a0a0a;--muted:#9a7070;--rule:#e8d0d0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:400;overflow-x:hidden;}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");opacity:0.55;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;background:rgba(253,240,240,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-mark{font-family:'Syne Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-mark:hover{color:var(--accent);}
+    .nav-links{list-style:none;display:flex;gap:2rem;}
+    .nav-links a{font-family:'Syne Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .page-wrap{max-width:720px;margin:0 auto;padding:8rem 2.5rem 6rem;}
+    .back-link{display:inline-flex;align-items:center;gap:0.5rem;font-family:'Syne Mono',monospace;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-bottom:3rem;transition:color .2s;}
+    .back-link:hover{color:var(--accent);}
+    .back-link::before{content:'←';}
+    .essay-eyebrow{font-family:'Syne Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+    .essay-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:300;line-height:1.1;color:var(--text);margin-bottom:1.5rem;}
+    .essay-deck{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:var(--muted);line-height:1.6;max-width:580px;margin-bottom:2.5rem;}
+    .essay-meta{display:flex;gap:2rem;padding:1.5rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:3.5rem;flex-wrap:wrap;}
+    .meta-item{display:flex;flex-direction:column;gap:0.25rem;}
+    .meta-label{font-family:'Syne Mono',monospace;font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+    .meta-value{font-size:0.85rem;font-weight:600;color:var(--text);}
+    .essay-body h2{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:400;margin:2.5rem 0 1rem;color:var(--text);}
+    .essay-body p{font-size:1rem;line-height:1.85;color:#4a2a2a;margin-bottom:1.4rem;}
+    .essay-body blockquote{border-left:2px solid var(--accent);padding:1rem 1.5rem;margin:2rem 0;background:var(--bg2);}
+    .essay-body blockquote p{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--text);margin:0;}
+    .tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--rule);}
+    .tag{font-family:'Syne Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.35rem 0.8rem;border:1px solid var(--rule);color:var(--muted);}
+    footer{border-top:1px solid var(--rule);padding:2.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+    .f-name{font-family:'Syne Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+    .f-links{list-style:none;display:flex;gap:1.5rem;}
+    .f-links a{font-family:'Syne Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .f-links a:hover{color:var(--accent);}
+    .f-copy{font-family:'Syne Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--rule);}
+    @media(max-width:600px){nav{padding:1rem 1.2rem;}.nav-links{gap:1.2rem;}.page-wrap{padding:6rem 1.2rem 4rem;}}
+</style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-mark">Tabitha Bennet</a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="page-wrap">
+    <a href="index.html#writing" class="back-link">Back to Ideas</a>
+    <p class="essay-eyebrow">Healthtech × Personal Data</p>
+    <h1 class="essay-title">Your Body Is Generating Data You Can't Read Yet</h1>
+    <p class="essay-deck">The biosensors exist. The genomic sequencing exists. The gap is interpretability - and that's fundamentally a design challenge.</p>
+    <div class="essay-meta">
+      <div class="meta-item"><span class="meta-label">Topic</span><span class="meta-value">Healthtech</span></div>
+      <div class="meta-item"><span class="meta-label">Read time</span><span class="meta-value">6 min read</span></div>
+      <div class="meta-item"><span class="meta-label">By</span><span class="meta-value">Tabitha Bennet</span></div>
+    </div>
+    <div class="essay-body">
+
+      <h2>The Data Deluge</h2>
+      <p>Right now, your Apple Watch knows more about your cardiac patterns than most doctors will ever learn from a single appointment. Your gut microbiome contains roughly 38 trillion microorganisms, each generating signals that influence your mood, immune response, and metabolic rate. Your genome holds predispositions to conditions that won't manifest for decades.</p>
+      <p>None of this is secret. The technology to collect it exists, is affordable, and is increasingly mainstream. The problem is that almost none of it is interpretable by the person it belongs to.</p>
+      <h2>The Interpretability Gap</h2>
+      <p>I've been thinking about this a lot while building VITL Holistic. The single greatest challenge in health optimisation isn't access to testing - it's access to meaning. A VO2 max score is a number. A HRV trend is a graph. A gut microbiome report is a PDF with 40 pages of Latin species names.</p>
+      <blockquote><p>Data without narrative is noise. The job of health technology design is to turn biological signal into human meaning.</p></blockquote>
+      <p>This is where healthtech consistently fails. Companies invest enormous resources in the science of measurement and almost nothing in the design of interpretation. The result is platforms that technically work and practically confuse.</p>
+      <h2>What Good Design Looks Like Here</h2>
+      <p>The best examples of health data design do a few things well. They prioritise signal over completeness - showing you the three things that matter most, not all 200 biomarkers. They contextualise readings against your own baseline rather than population averages. They translate clinical language into plain English without losing scientific accuracy.</p>
+      <p>They also respect the emotional weight of health information. Learning something unexpected about your own body is not a neutral cognitive event. The design needs to hold that.</p>
+      <h2>The Personalised Future</h2>
+      <p>The direction of travel is clear: medicine will become increasingly predictive, preventive, and personalised. Nutrigenomics will tell you which dietary interventions work for your specific genome. Continuous glucose monitoring will replace annual blood panels. AI-powered pattern recognition will catch disease signals years before symptoms appear.</p>
+      <p>All of this will only work if the interfaces through which people encounter their own health data are genuinely good. This is one of the most important design problems of the next decade, and it's barely being treated as a design problem at all.</p>
+    
+    </div>
+    <div class="tags"><span class="tag">Healthtech</span><span class="tag">Data</span><span class="tag">Wearables</span><span class="tag">Personalised Medicine</span></div>
+  </div>
+  <footer>
+    <div class="f-name">Tabitha Bennet</div>
+    <ul class="f-links">
+      <li><a href="https://linkedin.com/in/tabitha-bennet-4a0341257" target="_blank">LinkedIn</a></li>
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Email</a></li
