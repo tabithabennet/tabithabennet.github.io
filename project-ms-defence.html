@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Engineering Defence Simulator - Tabitha Bennet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#fdf0f0;--bg2:#f7e6e6;--bg3:#f2dcdc;--accent:#cc1a1a;--accent2:#991010;--text:#1a0a0a;--muted:#9a7070;--rule:#e8d0d0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:400;overflow-x:hidden;}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");opacity:0.55;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;background:rgba(253,240,240,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-mark{font-family:'Syne Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-mark:hover{color:var(--accent);}
+    .nav-links{list-style:none;display:flex;gap:2rem;}
+    .nav-links a{font-family:'Syne Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .page-wrap { max-width: 900px; margin: 0 auto; padding: 8rem 2.5rem 6rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem; transition: color .2s; }
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+    .proj-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .proj-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 300; line-height: 1.05; color: var(--text); margin-bottom: 1.5rem; }
+    .proj-subtitle { font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 600px; margin-bottom: 3rem; }
+    .proj-meta { display: flex; gap: 3rem; padding: 2rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 4rem; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .meta-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .proj-section { margin-bottom: 3.5rem; }
+    .proj-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 1.2rem; color: var(--text); }
+    .proj-section p { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 1rem; }
+    .proj-section ul { padding-left: 1.5rem; }
+    .proj-section li { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 0.4rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .tag { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.35rem 0.8rem; border: 1px solid var(--rule); color: var(--muted); }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
+    .stat-box { background: var(--bg2); padding: 1.5rem; border: 1px solid var(--rule); }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-desc { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .divider { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+    .quote-block { border-left: 2px solid var(--accent); padding: 1.2rem 1.8rem; background: var(--bg2); margin: 2rem 0; }
+    .quote-block p { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-style: italic; color: var(--text); margin: 0; }
+    .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
+    .step { background: var(--bg2); padding: 1.2rem; border: 1px solid var(--rule); }
+    .step-num { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+    .step-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); }
+
+    /* Attack chain */
+    .kill-chain { margin: 2rem 0; }
+    .chain-step { display: flex; gap: 1.5rem; padding: 1.2rem 1.5rem; border: 1px solid var(--rule); border-bottom: none; background: var(--bg2); align-items: flex-start; }
+    .chain-step:first-child { border-top-left-radius: 2px; border-top-right-radius: 2px; }
+    .chain-step:last-child { border-bottom: 1px solid var(--rule); border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
+    .chain-step.critical { background: #f9e8e8; border-left: 2px solid var(--accent); }
+    .step-badge { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.3rem 0.6rem; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; margin-top: 0.2rem; }
+    .step-badge.critical { border-color: var(--accent); color: var(--accent); background: rgba(204,26,26,0.06); }
+    .chain-step-num { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--rule); line-height: 1; flex-shrink: 0; width: 28px; padding-top: 2px; }
+    .chain-step.critical .chain-step-num { color: var(--accent); }
+    .chain-content { flex: 1; }
+    .chain-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .chain-desc { font-size: 0.85rem; line-height: 1.6; color: var(--muted); }
+    .chain-footer { display: flex; justify-content: space-between; align-items: flex-start; }
+
+    /* Audit tool */
+    .audit-tool { border: 1px solid var(--rule); margin: 2rem 0; }
+    .audit-header { background: var(--bg3); padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+    .audit-name { font-family: 'Syne Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text); }
+    .audit-status { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.8rem; border: 1px solid #c8d8c8; color: #3a6a3a; background: #eff5ef; }
+    .audit-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-bottom: 1px solid var(--rule); }
+    .audit-count { padding: 1.2rem 1.5rem; border-right: 1px solid var(--rule); }
+    .audit-count:last-child { border-right: none; }
+    .audit-n { font-family: 'Cormorant Garamond', serif; font-size: 2rem; line-height: 1; margin-bottom: 0.3rem; }
+    .audit-n.critical { color: var(--accent); }
+    .audit-n.warning { color: #9a5500; }
+    .audit-n.pass { color: #3a6a3a; }
+    .audit-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .audit-checks { padding: 0; }
+    .check-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); cursor: pointer; transition: background .15s; }
+    .check-row:last-child { border-bottom: none; }
+    .check-row:hover { background: var(--bg3); }
+    .check-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne Mono', monospace; font-size: 0.6rem; font-weight: 700; flex-shrink: 0; border: 1px solid; }
+    .check-icon.fail { border-color: var(--accent); color: var(--accent); background: rgba(204,26,26,0.07); }
+    .check-icon.warn { border-color: #9a5500; color: #9a5500; background: rgba(154,85,0,0.07); }
+    .check-icon.pass { border-color: #3a6a3a; color: #3a6a3a; background: rgba(58,106,58,0.07); }
+    .check-name { flex: 1; font-size: 0.88rem; }
+    .check-status { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .check-status.fail { color: var(--accent); }
+    .check-status.warn { color: #9a5500; }
+    .check-status.pass { color: #3a6a3a; }
+    .check-detail { display: none; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--rule); background: var(--bg); font-size: 0.85rem; line-height: 1.7; color: #4a2a2a; }
+    .check-detail.open { display: block; }
+    .check-detail strong { color: var(--text); display: block; font-size: 0.75rem; font-family: 'Syne Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; margin-top: 0.8rem; }
+    .check-detail strong:first-child { margin-top: 0; }
+    .check-detail ul { padding-left: 1.2rem; margin-top: 0.4rem; }
+    .check-detail li { margin-bottom: 0.3rem; font-size: 0.83rem; }
+
+    /* Mitigation table */
+    .mitigation-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1.5rem 0; }
+    .mitigation-table th { text-align: left; font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); padding: 0.7rem 1rem; border-bottom: 1px solid var(--rule); }
+    .mitigation-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; color: #4a2a2a; }
+    .mitigation-table tr:last-child td { border-bottom: none; }
+    .mitigation-table td small { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+    .prio-pill { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.6rem; white-space: nowrap; }
+    .prio-pill.high { border: 1px solid var(--accent); color: var(--accent); background: rgba(204,26,26,0.06); }
+    .prio-pill.med { border: 1px solid #9a5500; color: #9a5500; background: rgba(154,85,0,0.06); }
+    .prio-pill.low { border: 1px solid #3a6a3a; color: #3a6a3a; background: rgba(58,106,58,0.06); }
+
+    /* Tabs */
+    .tabs { display: flex; border-bottom: 1px solid var(--rule); margin-bottom: 2.5rem; }
+    .tab-btn { font-family: 'Syne Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.8rem 1.5rem; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    footer{border-top:1px solid var(--rule);padding:2.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+    .f-name{font-family:'Syne Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+    .f-links{list-style:none;display:flex;gap:1.5rem;}
+    .f-links a{font-family:'Syne Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .f-links a:hover{color:var(--accent);}
+    @media(max-width:600px){nav{padding:1rem 1.2rem;}.nav-links{gap:1.2rem;}.page-wrap{padding:6rem 1.2rem 4rem;}.stat-grid{grid-template-columns:1fr 1fr;}.proj-meta{gap:1.5rem;}.process-steps{grid-template-columns:1fr 1fr;}.audit-summary{grid-template-columns:1fr 1fr 1fr;}.tabs{overflow-x:auto;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-mark">Tabitha Bennet</a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <a href="index.html#projects" class="back-link">Back to Work</a>
+
+    <p class="proj-eyebrow">Cybersecurity · Research &amp; Build · 2025</p>
+    <h1 class="proj-title">Social Engineering<br>Defence Simulator</h1>
+    <p class="proj-subtitle">A post-incident research project modelling the attack vectors used in the M&amp;S breach — and an interactive tool to surface those vulnerabilities before attackers do.</p>
+
+    <div class="proj-meta">
+      <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Researcher &amp; Developer</span></div>
+      <div class="meta-item"><span class="meta-label">Year</span><span class="meta-value">2025</span></div>
+      <div class="meta-item"><span class="meta-label">Domain</span><span class="meta-value">Cybersecurity</span></div>
+      <div class="meta-item"><span class="meta-label">Stack</span><span class="meta-value">HTML · JS · Security Research</span></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('research', this)">Research</button>
+      <button class="tab-btn" onclick="switchTab('tool', this)">Live Tool</button>
+      <button class="tab-btn" onclick="switchTab('mitigations', this)">Mitigations</button>
+    </div>
+
+    <!-- TAB: RESEARCH -->
+    <div class="tab-pane active" id="tab-research">
+
+      <div class="proj-section">
+        <h2>The Incident</h2>
+        <p>In April 2025, Marks &amp; Spencer suffered one of the most damaging cyberattacks in UK retail history — not because of a sophisticated zero-day exploit, but because of a phone call. This project started as a question: what preventable failures led to £300m in lost profit, and what would a defence tool built on those failures actually look like?</p>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num">£300m</div><div class="stat-desc">Estimated operating profit lost in 2025/26</div></div>
+        <div class="stat-box"><div class="stat-num">46</div><div class="stat-desc">Days online shopping was suspended</div></div>
+        <div class="stat-box"><div class="stat-num">65k+</div><div class="stat-desc">Employees across 1,400+ stores affected</div></div>
+      </div>
+
+      <div class="proj-section">
+        <h2>The Attack Kill Chain</h2>
+        <p>The breach unfolded across several months, with the most critical failure happening not in a data centre, but on a support call. Understanding exactly how the chain broke reveals where the defences needed to be.</p>
+
+        <div class="kill-chain">
+          <div class="chain-step">
+            <div class="chain-step-num">1</div>
+            <div class="chain-footer">
+              <div class="chain-content">
+                <div class="chain-title">Initial compromise — February 2025</div>
+                <div class="chain-desc">Scattered Spider gained early access and exfiltrated the Windows domain controller's NTDS.dit file — the Active Directory database storing password hashes for every domain user. This happened two months before the ransomware triggered, entirely undetected.</div>
+              </div>
+              <span class="step-badge">Stealth</span>
+            </div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-step-num">2</div>
+            <div class="chain-footer">
+              <div class="chain-content">
+                <div class="chain-title">Offline hash cracking</div>
+                <div class="chain-desc">With NTDS.dit in hand, attackers cracked the hashes offline — outside M&amp;S's detection perimeter — yielding plaintext credentials for a range of domain accounts.</div>
+              </div>
+              <span class="step-badge">Offline</span>
+            </div>
+          </div>
+          <div class="chain-step critical">
+            <div class="chain-step-num">3</div>
+            <div class="chain-footer">
+              <div class="chain-content">
+                <div class="chain-title">Social engineering the helpdesk — April 17</div>
+                <div class="chain-desc">An attacker impersonated an M&amp;S employee and called TCS (Tata Consultancy Services), M&amp;S's outsourced IT helpdesk. The agent reset the target user's password — handing over the critical entry point. No robust identity verification stopped them.</div>
+              </div>
+              <span class="step-badge critical">Root Cause</span>
+            </div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-step-num">4</div>
+            <div class="chain-footer">
+              <div class="chain-content">
+                <div class="chain-title">Lateral movement &amp; privilege escalation</div>
+                <div class="chain-desc">Using the reset credentials, attackers moved laterally across connected systems, escalating privileges and mapping M&amp;S's digital infrastructure before triggering the payload.</div>
+              </div>
+              <span class="step-badge">Lateral</span>
+            </div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-step-num">5</div>
+            <div class="chain-footer">
+              <div class="chain-content">
+                <div class="chain-title">DragonForce ransomware deployed — April 19</div>
+                <div class="chain-desc">The group deployed DragonForce ransomware in a double-extortion attack, encrypting servers and simultaneously exfiltrating customer data including names, addresses, dates of birth, and order histories.</div>
+              </div>
+              <span class="step-badge">Impact</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        <p>The most dangerous attack isn't the one that exploits your technology. It's the one that exploits your people.</p>
+      </div>
+
+      <div class="proj-section">
+        <h2>Research Methodology</h2>
+        <p>This project synthesised findings from multiple cybersecurity analysts, the UK Parliamentary Business and Trade Sub-Committee hearing at which M&amp;S Chairman Archie Norman confirmed the social engineering root cause, and technical analysis of the Active Directory exploitation pathway.</p>
+        <p>The goal was not to audit M&amp;S specifically, but to extract a generalised model of the vulnerabilities and translate those into a tool any organisation could run against itself.</p>
+      </div>
+
+    </div>
+
+    <!-- TAB: TOOL -->
+    <div class="tab-pane" id="tab-tool">
+
+      <div class="proj-section">
+        <h2>The Audit Tool</h2>
+        <p>This tool simulates the nine vulnerability checks that, had they been in place before April 2025, could have broken the M&amp;S attack chain at multiple points. Each check maps directly to a step in the kill chain. Click any row to expand and see what the control protects against and how to implement it.</p>
+      </div>
+
+      <div class="audit-tool">
+        <div class="audit-header">
+          <span class="audit-name">SocialShield · Identity Risk Auditor</span>
+          <span class="audit-status">v1.0 · Running</span>
+        </div>
+        <div class="audit-summary">
+          <div class="audit-count"><div class="audit-n critical">4</div><div class="audit-label">Critical findings</div></div>
+          <div class="audit-count"><div class="audit-n warning">3</div><div class="audit-label">Warnings</div></div>
+          <div class="audit-count"><div class="audit-n pass">2</div><div class="audit-label">Controls passing</div></div>
+        </div>
+        <div class="audit-checks">
+
+          <div class="check-row" onclick="toggleDetail('d1')">
+            <div class="check-icon fail">✕</div>
+            <span class="check-name">Helpdesk identity verification protocol</span>
+            <span class="check-status fail">FAIL · Root cause</span>
+          </div>
+          <div class="check-detail" id="d1">
+            <strong>What this checks</strong>
+            Whether your IT helpdesk requires a second factor of identity verification before performing privileged actions like password resets. Verbal confirmation of a name or employee ID is not sufficient.
+            <strong>How M&amp;S was exploited</strong>
+            Attackers called TCS helpdesk, posed as an M&amp;S employee, and convinced the agent to reset a domain account password. No robust identity check stopped them.
+            <strong>Remediation</strong>
+            <ul>
+              <li>Require manager co-approval or a hardware token confirmation before any password reset</li>
+              <li>Implement a callback verification policy to the user's registered number</li>
+              <li>Log all helpdesk-initiated resets with a mandatory hold period</li>
+            </ul>
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d2')">
+            <div class="check-icon fail">✕</div>
+            <span class="check-name">NTDS.dit exfiltration monitoring</span>
+            <span class="check-status fail">FAIL · Stealth phase</span>
+          </div>
+          <div class="check-detail" id="d2">
+            <strong>What this checks</strong>
+            Whether alerting exists for access to or copying of NTDS.dit — the Active Directory database storing all password hashes. This file should never leave a domain controller.
+            <strong>How M&amp;S was exploited</strong>
+            Attackers exfiltrated NTDS.dit as early as February 2025, two months before the ransomware triggered — undetected the entire time.
+            <strong>Remediation</strong>
+            <ul>
+              <li>Alert on Volume Shadow Copy Service usage on domain controllers</li>
+              <li>Monitor for unusual outbound traffic from DCs</li>
+              <li>Deploy a SIEM rule: any read of ntds.dit outside scheduled backup windows = immediate P1</li>
+            </ul>
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d3')">
+            <div class="check-icon fail">✕</div>
+            <span class="check-name">Third-party vendor privileged access controls</span>
+            <span class="check-status fail">FAIL · Supply chain</span>
+          </div>
+          <div class="check-detail" id="d3">
+            <strong>What this checks</strong>
+            Whether third-party vendors have the minimum required access — and whether their actions are audited in real-time. Outsourced helpdesks with domain-level permissions are a significant attack surface.
+            <strong>How M&amp;S was exploited</strong>
+            TCS had sufficient access to reset domain account passwords without secondary authorisation. The weak link was entirely outside M&amp;S's direct control.
+            <strong>Remediation</strong>
+            <ul>
+              <li>Apply zero-trust principles: just-in-time, just-enough access for all vendors</li>
+              <li>Require vendor actions to be co-authorised by an internal employee</li>
+              <li>Audit all privileged vendor activity in a centralised SIEM</li>
+            </ul>
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d4')">
+            <div class="check-icon fail">✕</div>
+            <span class="check-name">Privileged account MFA enforcement</span>
+            <span class="check-status fail">FAIL · Escalation</span>
+          </div>
+          <div class="check-detail" id="d4">
+            <strong>What this checks</strong>
+            Whether all domain admin and privileged accounts require phishing-resistant MFA — not SMS or TOTP, which can be bypassed through credential theft and social engineering.
+            <strong>Remediation</strong>
+            <ul>
+              <li>Enforce FIDO2/WebAuthn hardware keys for all domain admin accounts</li>
+              <li>Block legacy authentication protocols (NTLM, pass-the-hash mitigations)</li>
+              <li>Use Microsoft's Protected Users security group for tier-0 accounts</li>
+            </ul>
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d5')">
+            <div class="check-icon warn">!</div>
+            <span class="check-name">Lateral movement detection (east-west)</span>
+            <span class="check-status warn">Warning</span>
+          </div>
+          <div class="check-detail" id="d5">
+            <strong>What this checks</strong>
+            Whether your network detection tools flag unusual authentication patterns — one account logging into many systems in quick succession is a classic lateral movement signal.
+            <strong>Remediation</strong>
+            <ul>
+              <li>Deploy a User and Entity Behaviour Analytics (UEBA) tool</li>
+              <li>Alert on accounts authenticating to more than N systems within a time window</li>
+              <li>Apply network micro-segmentation to limit blast radius</li>
+            </ul>
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d6')">
+            <div class="check-icon warn">!</div>
+            <span class="check-name">Ransomware incident response playbook</span>
+            <span class="check-status warn">Warning</span>
+          </div>
+          <div class="check-detail" id="d6">
+            <strong>What this checks</strong>
+            Whether a tested, documented ransomware IR playbook exists — including offline backups, communication templates, and escalation chains. Tested means tabletop exercises, not just documentation.
+            <strong>Context</strong>
+            Insiders suggested M&amp;S lacked a proper ransomware IR plan, forcing improvised responses that stretched recovery to 46 days. Even basic preparation dramatically compresses recovery time.
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d7')">
+            <div class="check-icon warn">!</div>
+            <span class="check-name">Vishing simulation training for helpdesk</span>
+            <span class="check-status warn">Warning</span>
+          </div>
+          <div class="check-detail" id="d7">
+            <strong>What this checks</strong>
+            Whether helpdesk and support staff receive regular, scenario-based training that includes vishing (voice phishing) simulations — not just email phishing awareness.
+            <strong>Remediation</strong>
+            <ul>
+              <li>Run quarterly vishing simulation exercises with helpdesk staff</li>
+              <li>Train staff to recognise urgency and authority pressure tactics</li>
+              <li>Create a no-blame reporting culture for suspected social engineering calls</li>
+            </ul>
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d8')">
+            <div class="check-icon pass">✓</div>
+            <span class="check-name">Cyber insurance coverage in place</span>
+            <span class="check-status pass">Pass</span>
+          </div>
+          <div class="check-detail" id="d8">
+            <strong>Context</strong>
+            M&amp;S held cyber insurance of up to £100m. While it didn't prevent the attack, it provides partial financial recovery. Verify your policy covers ransomware, data exfiltration, and business interruption as separate line items — not all policies do.
+          </div>
+
+          <div class="check-row" onclick="toggleDetail('d9')">
+            <div class="check-icon pass">✓</div>
+            <span class="check-name">Regulatory breach notification readiness</span>
+            <span class="check-status pass">Pass</span>
+          </div>
+          <div class="check-detail" id="d9">
+            <strong>Context</strong>
+            M&amp;S notified the UK NCSC promptly and engaged external forensic experts. Under UK GDPR, organisations must report certain breaches to the ICO within 72 hours. Ensure your legal obligation checklist is pre-prepared — during an incident is not the time to draft it.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB: MITIGATIONS -->
+    <div class="tab-pane" id="tab-mitigations">
+
+      <div class="proj-section">
+        <h2>Prioritised Remediation Roadmap</h2>
+        <p>Had these controls been in place before April 2025, the attack chain could have been broken at multiple points. The table below maps each control to where it would have intervened, with implementation effort and priority.</p>
+      </div>
+
+      <table class="mitigation-table">
+        <thead>
+          <tr>
+            <th>Control</th>
+            <th>Breaks chain at</th>
+            <th>Effort</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Phishing-resistant MFA on all privileged accounts</strong><small>FIDO2/WebAuthn hardware keys for domain admins</small></td>
+            <td>Step 3 — credential use</td>
+            <td>Medium</td>
+            <td><span class="prio-pill high">Critical</span></td>
+          </tr>
+          <tr>
+            <td><strong>Helpdesk identity verification protocol</strong><small>Manager co-approval + callback before password resets</small></td>
+            <td>Step 3 — social engineering</td>
+            <td>Low</td>
+            <td><span class="prio-pill high">Critical</span></td>
+          </tr>
+          <tr>
+            <td><strong>NTDS.dit exfiltration alerting</strong><small>SIEM rule: VSS access on DCs = immediate P1 alert</small></td>
+            <td>Step 1 — initial access</td>
+            <td>Low</td>
+            <td><span class="prio-pill high">Critical</span></td>
+          </tr>
+          <tr>
+            <td><strong>Third-party vendor access review</strong><small>JIT/JEA access model, co-authorisation for privileged actions</small></td>
+            <td>Step 3 — supply chain</td>
+            <td>Medium</td>
+            <td><span class="prio-pill high">Critical</span></td>
+          </tr>
+          <tr>
+            <td><strong>UEBA / lateral movement detection</strong><small>Anomaly detection on authentication patterns across the estate</small></td>
+            <td>Step 4 — lateral movement</td>
+            <td>High</td>
+            <td><span class="prio-pill med">High</span></td>
+          </tr>
+          <tr>
+            <td><strong>Ransomware IR playbook (tested)</strong><small>Documented + tabletop-exercised plan including offline backups</small></td>
+            <td>Step 5 — reduces impact</td>
+            <td>Medium</td>
+            <td><span class="prio-pill med">High</span></td>
+          </tr>
+          <tr>
+            <td><strong>Vishing simulation training for helpdesk</strong><small>Quarterly voice-phishing drills, scenario-based not just e-learning</small></td>
+            <td>Step 3 — human layer</td>
+            <td>Low</td>
+            <td><span class="prio-pill med">Medium</span></td>
+          </tr>
+          <tr>
+            <td><strong>Network micro-segmentation</strong><small>Limit blast radius by isolating critical systems</small></td>
+            <td>Step 4 — limits spread</td>
+            <td>High</td>
+            <td><span class="prio-pill low">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="proj-section">
+        <h2>Key Lesson</h2>
+        <p>The M&amp;S breach is a case study in how sophisticated technical preparation — months of patient reconnaissance and offline cracking — can be undone in a single phone call. The most effective security investments are often the unglamorous ones: verification protocols, training, and access controls that make the human layer as hard to exploit as the technical one.</p>
+      </div>
+
+    </div>
+
+    <hr class="divider" />
+    <div class="tags">
+      <span class="tag">Cybersecurity</span>
+      <span class="tag">Identity &amp; Access</span>
+      <span class="tag">Active Directory</span>
+      <span class="tag">Social Engineering</span>
+      <span class="tag">Supply Chain Risk</span>
+      <span class="tag">Incident Response</span>
+      <span class="tag">Research</span>
+    </div>
+  </div>
+
+  <footer>
+    <div class="f-name">Tabitha Bennet</div>
+    <ul class="f-links">
+      <li><a href="https://linkedin.com/in/tabitha-bennet-4a0341257" target="_blank">LinkedIn</a></li>
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Email</a></li>
+    </ul>
+    <span style="font-family:'Syne Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--rule);">2025 Tabitha Bennet</span>
+  </footer>
+
+  <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function toggleDetail(id) {
+      const el = document.getElementById(id);
+      const isOpen = el.classList.contains('open');
+      document.querySelectorAll('.check-detail').forEach(d => d.classList.remove('open'));
+      if (!isOpen) el.classList.add('open');
+    }
+  </script>
+</body>
+</html>
