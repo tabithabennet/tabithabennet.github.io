@@ -139,7 +139,7 @@
 
     <p class="proj-eyebrow">Cybersecurity · Research &amp; Build · 2025</p>
     <h1 class="proj-title">Social Engineering<br>Defence Simulator</h1>
-    <p class="proj-subtitle">A post-incident research project modelling the attack vectors used in the M&amp;S breach — and an interactive tool to surface those vulnerabilities before attackers do.</p>
+    <p class="proj-subtitle">A post-incident research project modelling the attack vectors used in the M&amp;S breach, and an interactive tool to surface those vulnerabilities before attackers do.</p>
 
     <div class="proj-meta">
       <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Researcher &amp; Developer</span></div>
@@ -159,7 +159,7 @@
 
       <div class="proj-section">
         <h2>The Incident</h2>
-        <p>In April 2025, Marks &amp; Spencer suffered one of the most damaging cyberattacks in UK retail history — not because of a sophisticated zero-day exploit, but because of a phone call. This project started as a question: what preventable failures led to £300m in lost profit, and what would a defence tool built on those failures actually look like?</p>
+        <p>In April 2025, Marks &amp; Spencer suffered one of the most damaging cyberattacks in UK retail history, not because of a sophisticated zero-day exploit, but because of a phone call. This project started as a question: what preventable failures led to £300m in lost profit, and what would a defence tool built on those failures actually look like?</p>
       </div>
 
       <div class="stat-grid">
@@ -177,8 +177,8 @@
             <div class="chain-step-num">1</div>
             <div class="chain-footer">
               <div class="chain-content">
-                <div class="chain-title">Initial compromise — February 2025</div>
-                <div class="chain-desc">Scattered Spider gained early access and exfiltrated the Windows domain controller's NTDS.dit file — the Active Directory database storing password hashes for every domain user. This happened two months before the ransomware triggered, entirely undetected.</div>
+                <div class="chain-title">Initial compromise, February 2025</div>
+                <div class="chain-desc">Scattered Spider gained early access and exfiltrated the Windows domain controller's NTDS.dit file, the Active Directory database storing password hashes for every domain user. This happened two months before the ransomware triggered, entirely undetected.</div>
               </div>
               <span class="step-badge">Stealth</span>
             </div>
@@ -188,7 +188,7 @@
             <div class="chain-footer">
               <div class="chain-content">
                 <div class="chain-title">Offline hash cracking</div>
-                <div class="chain-desc">With NTDS.dit in hand, attackers cracked the hashes offline — outside M&amp;S's detection perimeter — yielding plaintext credentials for a range of domain accounts.</div>
+                <div class="chain-desc">With NTDS.dit in hand, attackers cracked the hashes offline, outside M&amp;S's detection perimeter, yielding plaintext credentials for a range of domain accounts.</div>
               </div>
               <span class="step-badge">Offline</span>
             </div>
@@ -197,8 +197,8 @@
             <div class="chain-step-num">3</div>
             <div class="chain-footer">
               <div class="chain-content">
-                <div class="chain-title">Social engineering the helpdesk — April 17</div>
-                <div class="chain-desc">An attacker impersonated an M&amp;S employee and called TCS (Tata Consultancy Services), M&amp;S's outsourced IT helpdesk. The agent reset the target user's password — handing over the critical entry point. No robust identity verification stopped them.</div>
+                <div class="chain-title">Social engineering the helpdesk, April 17</div>
+                <div class="chain-desc">An attacker impersonated an M&amp;S employee and called TCS (Tata Consultancy Services), M&amp;S's outsourced IT helpdesk. The agent reset the target user's password, handing over the critical entry point. No robust identity verification stopped them.</div>
               </div>
               <span class="step-badge critical">Root Cause</span>
             </div>
@@ -217,7 +217,7 @@
             <div class="chain-step-num">5</div>
             <div class="chain-footer">
               <div class="chain-content">
-                <div class="chain-title">DragonForce ransomware deployed — April 19</div>
+                <div class="chain-title">DragonForce ransomware deployed, April 19</div>
                 <div class="chain-desc">The group deployed DragonForce ransomware in a double-extortion attack, encrypting servers and simultaneously exfiltrating customer data including names, addresses, dates of birth, and order histories.</div>
               </div>
               <span class="step-badge">Impact</span>
@@ -283,7 +283,7 @@
           </div>
           <div class="check-detail" id="d2">
             <strong>What this checks</strong>
-            Whether alerting exists for access to or copying of NTDS.dit — the Active Directory database storing all password hashes. This file should never leave a domain controller.
+            Whether alerting exists for access to or copying of NTDS.dit, the Active Directory database storing all password hashes. This file should never leave a domain controller.
             <strong>How M&amp;S was exploited</strong>
             Attackers exfiltrated NTDS.dit as early as February 2025, two months before the ransomware triggered — undetected the entire time.
             <strong>Remediation</strong>
@@ -301,7 +301,7 @@
           </div>
           <div class="check-detail" id="d3">
             <strong>What this checks</strong>
-            Whether third-party vendors have the minimum required access — and whether their actions are audited in real-time. Outsourced helpdesks with domain-level permissions are a significant attack surface.
+            Whether third-party vendors have the minimum required access, and whether their actions are audited in real-time. Outsourced helpdesks with domain-level permissions are a significant attack surface.
             <strong>How M&amp;S was exploited</strong>
             TCS had sufficient access to reset domain account passwords without secondary authorisation. The weak link was entirely outside M&amp;S's direct control.
             <strong>Remediation</strong>
@@ -319,7 +319,7 @@
           </div>
           <div class="check-detail" id="d4">
             <strong>What this checks</strong>
-            Whether all domain admin and privileged accounts require phishing-resistant MFA — not SMS or TOTP, which can be bypassed through credential theft and social engineering.
+            Whether all domain admin and privileged accounts require phishing-resistant MFA, not SMS or TOTP, which can be bypassed through credential theft and social engineering.
             <strong>Remediation</strong>
             <ul>
               <li>Enforce FIDO2/WebAuthn hardware keys for all domain admin accounts</li>
@@ -335,7 +335,7 @@
           </div>
           <div class="check-detail" id="d5">
             <strong>What this checks</strong>
-            Whether your network detection tools flag unusual authentication patterns — one account logging into many systems in quick succession is a classic lateral movement signal.
+            Whether your network detection tools flag unusual authentication patterns, one account logging into many systems in quick succession is a classic lateral movement signal.
             <strong>Remediation</strong>
             <ul>
               <li>Deploy a User and Entity Behaviour Analytics (UEBA) tool</li>
@@ -351,7 +351,7 @@
           </div>
           <div class="check-detail" id="d6">
             <strong>What this checks</strong>
-            Whether a tested, documented ransomware IR playbook exists — including offline backups, communication templates, and escalation chains. Tested means tabletop exercises, not just documentation.
+            Whether a tested, documented ransomware IR playbook exists, including offline backups, communication templates, and escalation chains. Tested means tabletop exercises, not just documentation.
             <strong>Context</strong>
             Insiders suggested M&amp;S lacked a proper ransomware IR plan, forcing improvised responses that stretched recovery to 46 days. Even basic preparation dramatically compresses recovery time.
           </div>
@@ -363,7 +363,7 @@
           </div>
           <div class="check-detail" id="d7">
             <strong>What this checks</strong>
-            Whether helpdesk and support staff receive regular, scenario-based training that includes vishing (voice phishing) simulations — not just email phishing awareness.
+            Whether helpdesk and support staff receive regular, scenario-based training that includes vishing (voice phishing) simulations, not just email phishing awareness.
             <strong>Remediation</strong>
             <ul>
               <li>Run quarterly vishing simulation exercises with helpdesk staff</li>
@@ -379,7 +379,7 @@
           </div>
           <div class="check-detail" id="d8">
             <strong>Context</strong>
-            M&amp;S held cyber insurance of up to £100m. While it didn't prevent the attack, it provides partial financial recovery. Verify your policy covers ransomware, data exfiltration, and business interruption as separate line items — not all policies do.
+            M&amp;S held cyber insurance of up to £100m. While it didn't prevent the attack, it provides partial financial recovery. Verify your policy covers ransomware, data exfiltration, and business interruption as separate line items, not all policies do.
           </div>
 
           <div class="check-row" onclick="toggleDetail('d9')">
@@ -389,7 +389,7 @@
           </div>
           <div class="check-detail" id="d9">
             <strong>Context</strong>
-            M&amp;S notified the UK NCSC promptly and engaged external forensic experts. Under UK GDPR, organisations must report certain breaches to the ICO within 72 hours. Ensure your legal obligation checklist is pre-prepared — during an incident is not the time to draft it.
+            M&amp;S notified the UK NCSC promptly and engaged external forensic experts. Under UK GDPR, organisations must report certain breaches to the ICO within 72 hours. Ensure your legal obligation checklist is pre-prepared, during an incident is not the time to draft it.
           </div>
 
         </div>
@@ -417,49 +417,49 @@
         <tbody>
           <tr>
             <td><strong>Phishing-resistant MFA on all privileged accounts</strong><small>FIDO2/WebAuthn hardware keys for domain admins</small></td>
-            <td>Step 3 — credential use</td>
+            <td>Step 3: credential use</td>
             <td>Medium</td>
             <td><span class="prio-pill high">Critical</span></td>
           </tr>
           <tr>
             <td><strong>Helpdesk identity verification protocol</strong><small>Manager co-approval + callback before password resets</small></td>
-            <td>Step 3 — social engineering</td>
+            <td>Step 3: social engineering</td>
             <td>Low</td>
             <td><span class="prio-pill high">Critical</span></td>
           </tr>
           <tr>
             <td><strong>NTDS.dit exfiltration alerting</strong><small>SIEM rule: VSS access on DCs = immediate P1 alert</small></td>
-            <td>Step 1 — initial access</td>
+            <td>Step 1: initial access</td>
             <td>Low</td>
             <td><span class="prio-pill high">Critical</span></td>
           </tr>
           <tr>
             <td><strong>Third-party vendor access review</strong><small>JIT/JEA access model, co-authorisation for privileged actions</small></td>
-            <td>Step 3 — supply chain</td>
+            <td>Step 3: supply chain</td>
             <td>Medium</td>
             <td><span class="prio-pill high">Critical</span></td>
           </tr>
           <tr>
             <td><strong>UEBA / lateral movement detection</strong><small>Anomaly detection on authentication patterns across the estate</small></td>
-            <td>Step 4 — lateral movement</td>
+            <td>Step 4: lateral movement</td>
             <td>High</td>
             <td><span class="prio-pill med">High</span></td>
           </tr>
           <tr>
             <td><strong>Ransomware IR playbook (tested)</strong><small>Documented + tabletop-exercised plan including offline backups</small></td>
-            <td>Step 5 — reduces impact</td>
+            <td>Step 5: reduces impact</td>
             <td>Medium</td>
             <td><span class="prio-pill med">High</span></td>
           </tr>
           <tr>
             <td><strong>Vishing simulation training for helpdesk</strong><small>Quarterly voice-phishing drills, scenario-based not just e-learning</small></td>
-            <td>Step 3 — human layer</td>
+            <td>Step 3: human layer</td>
             <td>Low</td>
             <td><span class="prio-pill med">Medium</span></td>
           </tr>
           <tr>
             <td><strong>Network micro-segmentation</strong><small>Limit blast radius by isolating critical systems</small></td>
-            <td>Step 4 — limits spread</td>
+            <td>Step 4: limits spread</td>
             <td>High</td>
             <td><span class="prio-pill low">Medium</span></td>
           </tr>
@@ -468,7 +468,7 @@
 
       <div class="proj-section">
         <h2>Key Lesson</h2>
-        <p>The M&amp;S breach is a case study in how sophisticated technical preparation — months of patient reconnaissance and offline cracking — can be undone in a single phone call. The most effective security investments are often the unglamorous ones: verification protocols, training, and access controls that make the human layer as hard to exploit as the technical one.</p>
+        <p>The M&amp;S breach is a case study in how sophisticated technical preparation, months of patient reconnaissance and offline cracking — can be undone in a single phone call. The most effective security investments are often the unglamorous ones: verification protocols, training, and access controls that make the human layer as hard to exploit as the technical one.</p>
       </div>
 
     </div>
