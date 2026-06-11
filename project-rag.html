@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retrieval-Augmented QA Pipeline - Tabitha Bennet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#fdf0f0;--bg2:#f7e6e6;--bg3:#f2dcdc;--accent:#cc1a1a;--accent2:#991010;--text:#1a0a0a;--muted:#9a7070;--rule:#e8d0d0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:400;overflow-x:hidden;}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");opacity:0.55;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;background:rgba(253,240,240,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-mark{font-family:'Syne Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-mark:hover{color:var(--accent);}
+    .nav-links{list-style:none;display:flex;gap:2rem;}
+    .nav-links a{font-family:'Syne Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .page-wrap { max-width: 900px; margin: 0 auto; padding: 8rem 2.5rem 6rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem; transition: color .2s; }
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+    .proj-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .proj-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 300; line-height: 1.05; color: var(--text); margin-bottom: 1.5rem; }
+    .proj-subtitle { font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 600px; margin-bottom: 3rem; }
+    .proj-meta { display: flex; gap: 3rem; padding: 2rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 4rem; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .meta-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .proj-section { margin-bottom: 3.5rem; }
+    .proj-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 1.2rem; color: var(--text); }
+    .proj-section p { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 1rem; }
+    .proj-section ul { padding-left: 1.5rem; }
+    .proj-section li { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 0.4rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .tag { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.35rem 0.8rem; border: 1px solid var(--rule); color: var(--muted); }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
+    .stat-box { background: var(--bg2); padding: 1.5rem; border: 1px solid var(--rule); }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-desc { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .divider { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+    .quote-block { border-left: 2px solid var(--accent); padding: 1.2rem 1.8rem; background: var(--bg2); margin: 2rem 0; }
+    .quote-block p { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-style: italic; color: var(--text); margin: 0; }
+    .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
+    .step { background: var(--bg2); padding: 1.2rem; border: 1px solid var(--rule); }
+    .step-num { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+    .step-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); }
+
+    /* Attack chain */
+    .kill-chain { margin: 2rem 0; }
+    .chain-step { display: flex; gap: 1.5rem; padding: 1.2rem 1.5rem; border: 1px solid var(--rule); border-bottom: none; background: var(--bg2); align-items: flex-start; }
+    .chain-step:first-child { border-top-left-radius: 2px; border-top-right-radius: 2px; }
+    .chain-step:last-child { border-bottom: 1px solid var(--rule); border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
+    .chain-step.critical { background: #f9e8e8; border-left: 2px solid var(--accent); }
+    .step-badge { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.3rem 0.6rem; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; margin-top: 0.2rem; }
+    .step-badge.critical { border-color: var(--accent); color: var(--accent); background: rgba(204,26,26,0.06); }
+    .chain-step-num { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--rule); line-height: 1; flex-shrink: 0; width: 28px; padding-top: 2px; }
+    .chain-step.critical .chain-step-num { color: var(--accent); }
+    .chain-content { flex: 1; }
+    .chain-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .chain-desc { font-size: 0.85rem; line-height: 1.6; color: var(--muted); }
+    .chain-footer { display: flex; justify-content: space-between; align-items: flex-start; }
+
+    /* Audit tool */
+    .audit-tool { border: 1px solid var(--rule); margin: 2rem 0; }
+    .audit-header { background: var(--bg3); padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+    .audit-name { font-family: 'Syne Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text); }
+    .audit-status { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.8rem; border: 1px solid #c8d8c8; color: #3a6a3a; background: #eff5ef; }
+    .audit-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-bottom: 1px solid var(--rule); }
+    .audit-count { padding: 1.2rem 1.5rem; border-right: 1px solid var(--rule); }
+    .audit-count:last-child { border-right: none; }
+    .audit-n { font-family: 'Cormorant Garamond', serif; font-size: 2rem; line-height: 1; margin-bottom: 0.3rem; }
+    .audit-n.critical { color: var(--accent); }
+    .audit-n.warning { color: #9a5500; }
+    .audit-n.pass { color: #3a6a3a; }
+    .audit-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .audit-checks { padding: 0; }
+    .check-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); cursor: pointer; transition: background .15s; }
+    .check-row:last-child { border-bottom: none; }
+    .check-row:hover { background: var(--bg3); }
+    .check-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne Mono', monospace; font-size: 0.6rem; font-weight: 700; flex-shrink: 0; border: 1px solid; }
+    .check-icon.fail { border-color: var(--accent); color: var(--accent); background: rgba(204,26,26,0.07); }
+    .check-icon.warn { border-color: #9a5500; color: #9a5500; background: rgba(154,85,0,0.07); }
+    .check-icon.pass { border-color: #3a6a3a; color: #3a6a3a; background: rgba(58,106,58,0.07); }
+    .check-name { flex: 1; font-size: 0.88rem; }
+    .check-status { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .check-status.fail { color: var(--accent); }
+    .check-status.warn { color: #9a5500; }
+    .check-status.pass { color: #3a6a3a; }
+    .check-detail { display: none; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--rule); background: var(--bg); font-size: 0.85rem; line-height: 1.7; color: #4a2a2a; }
+    .check-detail.open { display: block; }
+    .check-detail strong { color: var(--text); display: block; font-size: 0.75rem; font-family: 'Syne Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; margin-top: 0.8rem; }
+    .check-detail strong:first-child { margin-top: 0; }
+    .check-detail ul { padding-left: 1.2rem; margin-top: 0.4rem; }
+    .check-detail li { margin-bottom: 0.3rem; font-size: 0.83rem; }
+
+    /* Mitigation table */
+    .mitigation-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1.5rem 0; }
+    .mitigation-table th { text-align: left; font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); padding: 0.7rem 1rem; border-bottom: 1px solid var(--rule); }
+    .mitigation-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; color: #4a2a2a; }
+    .mitigation-table tr:last-child td { border-bottom: none; }
+    .mitigation-table td small { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+    .prio-pill { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.6rem; white-space: nowrap; }
+    .prio-pill.high { border: 1px solid var(--accent); color: var(--accent); background: rgba(204,26,26,0.06); }
+    .prio-pill.med { border: 1px solid #9a5500; color: #9a5500; background: rgba(154,85,0,0.06); }
+    .prio-pill.low { border: 1px solid #3a6a3a; color: #3a6a3a; background: rgba(58,106,58,0.06); }
+
+    /* Tabs */
+    .tabs { display: flex; border-bottom: 1px solid var(--rule); margin-bottom: 2.5rem; }
+    .tab-btn { font-family: 'Syne Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.8rem 1.5rem; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    footer{border-top:1px solid var(--rule);padding:2.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+    .f-name{font-family:'Syne Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+    .f-links{list-style:none;display:flex;gap:1.5rem;}
+    .f-links a{font-family:'Syne Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .f-links a:hover{color:var(--accent);}
+    @media(max-width:600px){nav{padding:1rem 1.2rem;}.nav-links{gap:1.2rem;}.page-wrap{padding:6rem 1.2rem 4rem;}.stat-grid{grid-template-columns:1fr 1fr;}.proj-meta{gap:1.5rem;}.process-steps{grid-template-columns:1fr 1fr;}.audit-summary{grid-template-columns:1fr 1fr 1fr;}.tabs{overflow-x:auto;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-mark">Tabitha Bennet</a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <a href="index.html#projects" class="back-link">Back to Work</a>
+
+    <p class="proj-eyebrow">AI · Retrieval-Augmented Generation · 2025</p>
+    <h1 class="proj-title">Retrieval-Augmented<br>QA Pipeline</h1>
+    <p class="proj-subtitle">An end-to-end question-answering system over SQuAD 2.0 that grounds its answers in retrieved evidence, combining dense retrieval, cross-encoder re-ranking, and a LoRA-fine-tuned reader.</p>
+
+    <div class="proj-meta">
+      <div class="meta-item"><span class="meta-label">Role</span><span class="meta-value">Researcher &amp; Developer</span></div>
+      <div class="meta-item"><span class="meta-label">Year</span><span class="meta-value">2025</span></div>
+      <div class="meta-item"><span class="meta-label">Domain</span><span class="meta-value">NLP / Information Retrieval</span></div>
+      <div class="meta-item"><span class="meta-label">Stack</span><span class="meta-value">Python · PyTorch · FAISS · Transformers · LoRA</span></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('overview', this)">Overview</button>
+      <button class="tab-btn" onclick="switchTab('architecture', this)">Architecture</button>
+      <button class="tab-btn" onclick="switchTab('results', this)">Results</button>
+    </div>
+
+    <!-- TAB: OVERVIEW -->
+    <div class="tab-pane active" id="tab-overview">
+
+      <div class="proj-section">
+        <h2>The Problem</h2>
+        <p>A language model asked a factual question will answer confidently whether or not it actually knows. Retrieval-augmented generation tackles that by grounding the answer in evidence: instead of relying on what the model has memorised, the system first retrieves relevant passages and answers from them. SQuAD 2.0 sharpens the challenge further, because a third of its questions have no answer in the text at all, so the system has to know when to abstain rather than invent something.</p>
+      </div>
+
+      <div class="proj-section">
+        <h2>What I Built</h2>
+        <p>A full pipeline from a raw passage corpus to a grounded answer: encode and index the passages, retrieve candidates for a question, re-rank them for precision, and read the answer from the best context, fine-tuning the reader efficiently with LoRA. The goal was not a single model but a working system where each stage earns its place.</p>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num">66.4</div><div class="stat-desc">F1 score on SQuAD 2.0</div></div>
+        <div class="stat-box"><div class="stat-num">62.8</div><div class="stat-desc">Exact match</div></div>
+        <div class="stat-box"><div class="stat-num">~1/3</div><div class="stat-desc">Questions with no answer, requiring abstention</div></div>
+      </div>
+
+      <div class="quote-block">
+        <p>The interesting part of grounding a model isn't teaching it to answer. It's teaching it to know when it can't.</p>
+      </div>
+
+      <div class="proj-section">
+        <h2>Why It Mattered</h2>
+        <p>Beyond the marks, the project was a way to work hands-on with the parts of modern NLP I care most about: how retrieval and generation fit together, where a pipeline's quality is actually won or lost, and how to adapt a large model on a student's compute budget without retraining it from scratch.</p>
+      </div>
+
+    </div>
+
+    <!-- TAB: ARCHITECTURE -->
+    <div class="tab-pane" id="tab-architecture">
+
+      <div class="proj-section">
+        <h2>The Pipeline</h2>
+        <p>Four stages, each addressing a different failure mode. Retrieval finds candidate evidence fast; re-ranking sharpens its precision; the reader extracts the answer; LoRA makes adapting that reader affordable.</p>
+
+        <div class="process-steps">
+          <div class="step"><div class="step-num">01</div><div class="step-title">Index</div></div>
+          <div class="step"><div class="step-num">02</div><div class="step-title">Retrieve</div></div>
+          <div class="step"><div class="step-num">03</div><div class="step-title">Re-rank</div></div>
+          <div class="step"><div class="step-num">04</div><div class="step-title">Read</div></div>
+        </div>
+      </div>
+
+      <div class="kill-chain">
+        <div class="chain-step">
+          <div class="chain-step-num">1</div>
+          <div class="chain-footer">
+            <div class="chain-content">
+              <div class="chain-title">Dense indexing</div>
+              <div class="chain-desc">The passage corpus is encoded into dense vector embeddings and stored in a FAISS index, which supports fast approximate nearest-neighbour search over the whole collection. This is what makes retrieval scale beyond a brute-force comparison.</div>
+            </div>
+            <span class="step-badge">FAISS</span>
+          </div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-step-num">2</div>
+          <div class="chain-footer">
+            <div class="chain-content">
+              <div class="chain-title">Dense retrieval</div>
+              <div class="chain-desc">A question is embedded into the same vector space, and FAISS returns its top-k nearest passages by semantic similarity, not keyword overlap, so paraphrased or indirectly worded questions still surface the right context.</div>
+            </div>
+            <span class="step-badge">Top-k</span>
+          </div>
+        </div>
+        <div class="chain-step critical">
+          <div class="chain-step-num">3</div>
+          <div class="chain-footer">
+            <div class="chain-content">
+              <div class="chain-title">Cross-encoder re-ranking</div>
+              <div class="chain-desc">Dense retrieval is fast but coarse. A cross-encoder then scores each question-and-passage pair jointly, reading them together rather than comparing two separate embeddings, and re-orders the candidates. This precision step is where much of the answer quality is won.</div>
+            </div>
+            <span class="step-badge critical">Precision</span>
+          </div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-step-num">4</div>
+          <div class="chain-footer">
+            <div class="chain-content">
+              <div class="chain-title">Reading with a LoRA-tuned reader</div>
+              <div class="chain-desc">A transformer reader extracts the answer span from the top-ranked passage, or abstains when SQuAD 2.0 offers no answer. The reader is adapted with LoRA: small low-rank adapters are trained while the base weights stay frozen, giving most of the benefit of full fine-tuning at a fraction of the cost.</div>
+            </div>
+            <span class="step-badge">LoRA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-section">
+        <h2>Why LoRA</h2>
+        <p>Full fine-tuning of a large reader is expensive and memory-hungry. LoRA, low-rank adaptation, freezes the original weights and learns a small set of additional parameters instead. The result is a reader tuned to the task that trains quickly and runs on modest hardware, which mattered for a project built on a student's resources rather than a research cluster.</p>
+      </div>
+
+    </div>
+
+    <!-- TAB: RESULTS -->
+    <div class="tab-pane" id="tab-results">
+
+      <div class="proj-section">
+        <h2>Results</h2>
+        <p>On SQuAD 2.0 the system reached an F1 of 66.4 and an exact match of 62.8. The gap between the two is itself informative: F1 gives partial credit for answers that overlap the gold span, while exact match demands the answer be word-for-word correct, so the spread reflects answers that are nearly but not perfectly aligned.</p>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-num">66.4</div><div class="stat-desc">F1 (partial-overlap credit)</div></div>
+        <div class="stat-box"><div class="stat-num">62.8</div><div class="stat-desc">Exact match (word-for-word)</div></div>
+        <div class="stat-box"><div class="stat-num">2.0</div><div class="stat-desc">SQuAD version, with unanswerable questions</div></div>
+      </div>
+
+      <div class="proj-section">
+        <h2>Where Each Choice Earned Its Place</h2>
+        <p>The pipeline was built so that every component addressed a specific weakness of the one before it.</p>
+      </div>
+
+      <table class="mitigation-table">
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Choice</th>
+            <th>Why it mattered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Retrieval</strong></td>
+            <td>Dense embeddings + FAISS</td>
+            <td>Fast semantic search over the corpus; finds evidence that keyword matching would miss</td>
+          </tr>
+          <tr>
+            <td><strong>Re-ranking</strong></td>
+            <td>Cross-encoder</td>
+            <td>Joint scoring of question and passage lifts the truly relevant context to the top, improving what the reader sees</td>
+          </tr>
+          <tr>
+            <td><strong>Reading</strong></td>
+            <td>Transformer + LoRA</td>
+            <td>Extracts the answer span; LoRA adapts the reader efficiently without full fine-tuning</td>
+          </tr>
+          <tr>
+            <td><strong>Abstention</strong></td>
+            <td>No-answer handling</td>
+            <td>SQuAD 2.0 rewards knowing when not to answer; getting this right protects the score on unanswerable questions</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="proj-section">
+        <h2>What I'd Explore Next</h2>
+        <p>The clearest levers from here are the retrieval and re-ranking depth, how many candidates to pull and how aggressively to re-score them, and the abstention threshold, which trades answering more questions against answering wrong ones. Both are the kind of tuning where a pipeline's real-world reliability is decided, well after the headline architecture is in place.</p>
+      </div>
+
+    </div>
+
+    <hr class="divider" />
+    <div class="tags">
+      <span class="tag">Natural Language Processing</span>
+      <span class="tag">Retrieval-Augmented Generation</span>
+      <span class="tag">Dense Retrieval</span>
+      <span class="tag">FAISS</span>
+      <span class="tag">Cross-Encoder Re-ranking</span>
+      <span class="tag">LoRA Fine-tuning</span>
+      <span class="tag">SQuAD 2.0</span>
+    </div>
+  </div>
+
+  <footer>
+    <div class="f-name">Tabitha Bennet</div>
+    <ul class="f-links">
+      <li><a href="https://linkedin.com/in/tabitha-bennet-4a0341257" target="_blank">LinkedIn</a></li>
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="mailto:tabitha.bennet@yahoo.com">Email</a></li>
+    </ul>
+    <span style="font-family:'Syne Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--rule);">2025 Tabitha Bennet</span>
+  </footer>
+
+  <script>
+    function switchTab(name, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function toggleDetail(id) {
+      const el = document.getElementById(id);
+      const isOpen = el.classList.contains('open');
+      document.querySelectorAll('.check-detail').forEach(d => d.classList.remove('open'));
+      if (!isOpen) el.classList.add('open');
+    }
+  </script>
+</body>
+</html>
