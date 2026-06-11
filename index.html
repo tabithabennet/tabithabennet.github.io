@@ -380,9 +380,9 @@
     .bc-4 { grid-column: span 4; }
     .bc-5 { grid-column: span 4; }
     .bc-6 { grid-column: span 6; }
-    .bc-7 { grid-column: span 4; }
-    .bc-8 { grid-column: span 4; }
-    .bc-9 { grid-column: span 4; }
+    .bc-7 { grid-column: span 6; }
+    .bc-8 { grid-column: span 6; }
+    .bc-9 { grid-column: span 6; }
 
     .card-tag {
       font-family: 'Syne Mono', monospace;
@@ -968,6 +968,12 @@
     </ul>
     <span class="f-copy">© 2025 Tabitha Bennet</span>
   </footer>
+
+  <script>
+    // Always open at the top, ignoring the browser's restored scroll position
+    if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+    window.addEventListener('load', function () { window.scrollTo(0, 0); });
+  </script>
 
 </body>
 </html>
