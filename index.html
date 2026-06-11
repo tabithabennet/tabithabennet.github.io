@@ -379,10 +379,11 @@
     .bc-3 { grid-column: span 4; }
     .bc-4 { grid-column: span 4; }
     .bc-5 { grid-column: span 4; }
-    .bc-6 { grid-column: span 6; }
-    .bc-7 { grid-column: span 6; }
-    .bc-8 { grid-column: span 6; }
+    .bc-6 { grid-column: span 4; }
+    .bc-7 { grid-column: span 4; }
+    .bc-8 { grid-column: span 4; }
     .bc-9 { grid-column: span 6; }
+    .bc-10 { grid-column: span 6; }
 
     .card-tag {
       font-family: 'Syne Mono', monospace;
@@ -646,7 +647,7 @@
       .hero-bottom { grid-template-columns: 1fr 1fr; }
       .hero-stat:nth-child(3), .hero-stat:nth-child(4) { border-top: 1px solid var(--rule); }
       .bento { grid-template-columns: 1fr; }
-      .bc-1,.bc-2,.bc-3,.bc-4,.bc-5,.bc-6,.bc-7,.bc-8,.bc-9 { grid-column: span 1; }
+      .bc-1,.bc-2,.bc-3,.bc-4,.bc-5,.bc-6,.bc-7,.bc-8,.bc-9,.bc-10 { grid-column: span 1; }
       .writing-header { grid-template-columns: 1fr; gap: 1.5rem; padding: 3rem 1.5rem 2.5rem; }
       .essay-featured { cursor: pointer; grid-template-columns: 1fr; }
       .ef-left { display: none; }
@@ -765,7 +766,7 @@
         <p class="section-eyebrow">Selected Work</p>
         <h2 class="projects-title fade">Things I've built</h2>
       </div>
-      <span class="projects-count">09 projects</span>
+      <span class="projects-count">10 projects</span>
     </div>
     <div class="bento">
       <a href="https://hamptonspoloclub.com" target="_blank" class="bento-card bc-1">
@@ -844,6 +845,15 @@
         <span class="card-tag">AI · Agent · Automation</span>
         <h3 class="card-title">Otto, a Personal Admin Assistant</h3>
         <p class="card-desc">An LLM-powered assistant that triages my inbox, drafts client replies in my own voice, and tracks invoices and deadlines across freelance projects. Tool-calling over email and calendar, with a voice interface for hands-free days.</p>
+        <div class="card-footer">
+          <span class="card-meta">Personal Project · 2025</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+      <a href="project-margaux.html" class="bento-card bc-10">
+        <span class="card-tag">AI · Agent · Creator Economy</span>
+        <h3 class="card-title">Margaux, an AI Talent Manager</h3>
+        <p class="card-desc">An LLM agent that does the work of an influencer manager: sourcing brand deals, drafting pitches and replies, and running the deal pipeline. Every message is queued for human approval rather than sent automatically.</p>
         <div class="card-footer">
           <span class="card-meta">Personal Project · 2025</span>
           <span class="card-arrow">↗</span>
