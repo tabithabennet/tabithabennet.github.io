@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Tabitha Bennet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#fdf0f0;--bg2:#f7e6e6;--bg3:#f2dcdc;--accent:#cc1a1a;--accent2:#991010;--text:#1a0a0a;--muted:#9a7070;--rule:#e8d0d0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:400;overflow-x:hidden;}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");opacity:0.55;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2.5rem;background:rgba(253,240,240,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-mark{font-family:'Syne Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-mark:hover{color:var(--accent);}
+    .nav-links{list-style:none;display:flex;gap:2rem;}
+    .nav-links a{font-family:'Syne Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .page-wrap { max-width: 900px; margin: 0 auto; padding: 8rem 2.5rem 6rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 3rem; transition: color .2s; }
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '←'; }
+    .proj-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .proj-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 300; line-height: 1.05; color: var(--text); margin-bottom: 1.5rem; }
+    .proj-subtitle { font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 600px; margin-bottom: 3rem; }
+    .proj-meta { display: flex; gap: 3rem; padding: 2rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 4rem; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .meta-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .proj-section { margin-bottom: 3.5rem; }
+    .proj-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 1.2rem; color: var(--text); }
+    .proj-section p { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 1rem; }
+    .proj-section ul { padding-left: 1.5rem; }
+    .proj-section li { font-size: 1rem; line-height: 1.8; color: #4a2a2a; margin-bottom: 0.4rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+    .tag { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.35rem 0.8rem; border: 1px solid var(--rule); color: var(--muted); }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 2rem 0; }
+    .stat-box { background: var(--bg2); padding: 1.5rem; border: 1px solid var(--rule); }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+    .stat-desc { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .divider { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+    .quote-block { border-left: 2px solid var(--accent); padding: 1.2rem 1.8rem; background: var(--bg2); margin: 2rem 0; }
+    .quote-block p { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-style: italic; color: var(--text); margin: 0; }
+    .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
+    .step { background: var(--bg2); padding: 1.2rem; border: 1px solid var(--rule); }
+    .step-num { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+    .step-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); }
+
+    /* Attack chain */
+    .kill-chain { margin: 2rem 0; }
+    .chain-step { display: flex; gap: 1.5rem; padding: 1.2rem 1.5rem; border: 1px solid var(--rule); border-bottom: none; background: var(--bg2); align-items: flex-start; }
+    .chain-step:first-child { border-top-left-radius: 2px; border-top-right-radius: 2px; }
+    .chain-step:last-child { border-bottom: 1px solid var(--rule); border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
+    .chain-step.critical { background: #f9e8e8; border-left: 2px solid var(--accent); }
+    .step-badge { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.3rem 0.6rem; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; margin-top: 0.2rem; }
+    .step-badge.critical { border-color: var(--accent); color: var(--accent); background: rgba(204,26,26,0.06); }
+    .chain-step-num { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--rule); line-height: 1; flex-shrink: 0; width: 28px; padding-top: 2px; }
+    .chain-step.critical .chain-step-num { color: var(--accent); }
+    .chain-content { flex: 1; }
+    .chain-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .chain-desc { font-size: 0.85rem; line-height: 1.6; color: var(--muted); }
+    .chain-footer { display: flex; justify-content: space-between; align-items: flex-start; }
+
+    /* Audit tool */
+    .audit-tool { border: 1px solid var(--rule); margin: 2rem 0; }
+    .audit-header { background: var(--bg3); padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+    .audit-name { font-family: 'Syne Mono', monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text); }
+    .audit-status { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.8rem; border: 1px solid #c8d8c8; color: #3a6a3a; background: #eff5ef; }
+    .audit-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-bottom: 1px solid var(--rule); }
+    .audit-count { padding: 1.2rem 1.5rem; border-right: 1px solid var(--rule); }
+    .audit-count:last-child { border-right: none; }
+    .audit-n { font-family: 'Cormorant Garamond', serif; font-size: 2rem; line-height: 1; margin-bottom: 0.3rem; }
+    .audit-n.critical { color: var(--accent); }
+    .audit-n.warning { color: #9a5500; }
+    .audit-n.pass { color: #3a6a3a; }
+    .audit-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .audit-checks { padding: 0; }
+    .check-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); cursor: pointer; transition: background .15s; }
+    .check-row:last-child { border-bottom: none; }
+    .check-row:hover { background: var(--bg3); }
+    .check-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne Mono', monospace; font-size: 0.6rem; font-weight: 700; flex-shrink: 0; border: 1px solid; }
+    .check-icon.fail { border-color: var(--accent); color: var(--accent); background: rgba(204,26,26,0.07); }
+    .check-icon.warn { border-color: #9a5500; color: #9a5500; background: rgba(154,85,0,0.07); }
+    .check-icon.pass { border-color: #3a6a3a; color: #3a6a3a; background: rgba(58,106,58,0.07); }
+    .check-name { flex: 1; font-size: 0.88rem; }
+    .check-status { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .check-status.fail { color: var(--accent); }
+    .check-status.warn { color: #9a5500; }
+    .check-status.pass { color: #3a6a3a; }
+    .check-detail { display: none; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--rule); background: var(--bg); font-size: 0.85rem; line-height: 1.7; color: #4a2a2a; }
+    .check-detail.open { display: block; }
+    .check-detail strong { color: var(--text); display: block; font-size: 0.75rem; font-family: 'Syne Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; margin-top: 0.8rem; }
+    .check-detail strong:first-child { margin-top: 0; }
+    .check-detail ul { padding-left: 1.2rem; margin-top: 0.4rem; }
+    .check-detail li { margin-bottom: 0.3rem; font-size: 0.83rem; }
+
+    /* Mitigation table */
+    .mitigation-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1.5rem 0; }
+    .mitigation-table th { text-align: left; font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); padding: 0.7rem 1rem; border-bottom: 1px solid var(--rule); }
+    .mitigation-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.5; color: #4a2a2a; }
+    .mitigation-table tr:last-child td { border-bottom: none; }
+    .mitigation-table td small { display: block; font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+    .prio-pill { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.6rem; white-space: nowrap; }
+    .prio-pill.high { border: 1px solid var(--accent); color: var(--accent); background: rgba(204,26,26,0.06); }
+    .prio-pill.med { border: 1px solid #9a5500; color: #9a5500; background: rgba(154,85,0,0.06); }
+    .prio-pill.low { border: 1px solid #3a6a3a; color: #3a6a3a; background: rgba(58,106,58,0.06); }
+
+    /* Tabs */
+    .tabs { display: flex; border-bottom: 1px solid var(--rule); margin-bottom: 2.5rem; }
+    .tab-btn { font-family: 'Syne Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.8rem 1.5rem; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; }
+    .tab-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    footer{border-top:1px solid var(--rule);padding:2.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+    .f-name{font-family:'Syne Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+    .f-links{list-style:none;display:flex;gap:1.5rem;}
+    .f-links a{font-family:'Syne Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .f-links a:hover{color:var(--accent);}
+    @media(max-width:600px){nav{padding:1rem 1.2rem;}.nav-links{gap:1.2rem;}.page-wrap{padding:6rem 1.2rem 4rem;}.stat-grid{grid-template-columns:1fr 1fr;}.proj-meta{gap:1.5rem;}.process-steps{grid-template-columns:1fr 1fr;}.audit-summary{grid-template-columns:1fr 1fr 1fr;}.tabs{overflow-x:auto;}}
+  
+    /* CONTACT FORM */
+    .contact-wrap { max-width: 680px; }
+    .contact-form { margin-top: 2.75rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .field { display: flex; flex-direction: column; gap: 0.5rem; }
+    .field label {
+      font-family: 'Syne Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .field input, .field textarea {
+      font-family: 'Syne', sans-serif; font-size: 0.95rem; color: var(--text);
+      background: var(--bg2); border: 1px solid var(--rule); padding: 0.9rem 1rem;
+      border-radius: 2px; width: 100%; transition: border-color .2s, background .2s;
+    }
+    .field input:focus, .field textarea:focus {
+      outline: none; border-color: var(--accent); background: #fff;
+    }
+    .field textarea { resize: vertical; min-height: 150px; line-height: 1.6; }
+    .honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+    .send-btn {
+      font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em;
+      text-transform: uppercase; background: var(--accent); color: #fdf0f0; border: none;
+      padding: 0.95rem 1.9rem; cursor: pointer; font-weight: 700; align-self: flex-start;
+      transition: background .2s;
+    }
+    .send-btn:hover { background: var(--paper); }
+    .contact-aside {
+      margin-top: 2.75rem; padding-top: 2rem; border-top: 1px solid var(--rule);
+      font-size: 0.9rem; line-height: 1.8; color: var(--muted);
+    }
+    .contact-aside a { color: var(--accent); text-decoration: none; }
+    .contact-aside a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-mark">Tabitha Bennet</a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap contact-wrap">
+    <a href="index.html" class="back-link">Back to Home</a>
+
+    <p class="proj-eyebrow">Get in touch</p>
+    <h1 class="proj-title">Say hello</h1>
+    <p class="proj-subtitle">Have a project, a role, or an idea you'd like to talk through? Send me a message below and I'll get back to you.</p>
+
+    <form action="https://formsubmit.co/tabitha.bennet@yahoo.com" method="POST" class="contact-form">
+      <!-- FormSubmit settings -->
+      <input type="hidden" name="_subject" value="New message from tabithabennet.github.io" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_autoresponse" value="Thanks for reaching out, I've received your message and will reply soon. Tabitha" />
+      <!-- Spam honeypot: bots fill this, humans don't see it -->
+      <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" type="text" name="name" required />
+      </div>
+      <div class="field">
+        <label for="email">Your email</label>
+        <input id="email" type="email" name="email" required />
+      </div>
+      <div class="field">
+        <label for="subject">Subject</label>
+        <input id="subject" type="text" name="subject" />
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+
+      <button type="submit" class="send-btn">Send message ↗</button>
+    </form>
+
+    <p class="contact-aside">
+      Prefer to email directly? Reach me at <a href="mailto:tabitha.bennet@yahoo.com">tabitha.bennet@yahoo.com</a>,
+      or find me on <a href="https://linkedin.com/in/tabitha-bennet-4a0341257" target="_blank">LinkedIn</a>
+      and <a href="https://github.com/tabithabennet" target="_blank">GitHub</a>.
+    </p>
+  </div>
+
+  <footer>
+    <div class="f-name">Tabitha Bennet</div>
+    <ul class="f-links">
+      <li><a href="https://linkedin.com/in/tabitha-bennet-4a0341257" target="_blank">LinkedIn</a></li>
+      <li><a href="https://github.com/tabithabennet" target="_blank">GitHub</a></li>
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="index.html#writing">Ideas</a></li>
+    </ul>
+    <span style="font-family:'Syne Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--rule);">2025 Tabitha Bennet</span>
+  </footer>
+</body>
+</html>
